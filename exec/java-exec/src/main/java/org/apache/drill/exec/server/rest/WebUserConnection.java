@@ -24,6 +24,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.DrillBuf;
 import io.netty.channel.ChannelFuture;
 import org.apache.drill.common.exceptions.UserException;
+import org.apache.drill.common.types.TypeProtos;
 import org.apache.drill.exec.memory.BufferAllocator;
 import org.apache.drill.exec.physical.impl.materialize.QueryWritableBatch;
 import org.apache.drill.exec.proto.GeneralRPCProtos.Ack;
@@ -110,9 +111,10 @@ public class WebUserConnection extends AbstractDisposableUserClientConnection im
           final Map<String, String> record = Maps.newHashMap();
           for (VectorWrapper<?> vw : loader) {
             final String field = vw.getValueVector().getMetadata().getNamePart().getName();
+            final TypeProtos.MinorType fieldMinorType = vw.getValueVector().getMetadata().getMajorType().getMinorType();
             final Accessor accessor = vw.getValueVector().getAccessor();
             final Object value = i < accessor.getValueCount() ? accessor.getObject(i) : null;
-            final String display = value == null ? null : value.toString();
+            final String display = value == null ? null : ValueStringFormatter.getFormattedString(value, fieldMinorType);
             record.put(field, display);
           }
           results.add(record);
