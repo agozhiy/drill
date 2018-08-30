@@ -23,11 +23,11 @@ import java.time.LocalDateTime;
 
 import static org.junit.Assert.assertTrue;
 
-public class TestValueStringFormatter {
+public class TestWebServerUtil {
 
   @Test
   public void testTimestampWithThreeDigitMillis() {
-    String formattedValue = ValueStringFormatter.getFormattedString(
+    String formattedValue = WebServerUtil.getFormattedString(
         LocalDateTime.of(2012, 11, 5, 13, 0, 30, 12000000),
         TypeProtos.MinorType.TIMESTAMP);
     assertTrue(formattedValue.equals("2012-11-05 13:00:30.012"));
@@ -35,7 +35,7 @@ public class TestValueStringFormatter {
 
   @Test
   public void testTimestampWithTwoDigitMillis() {
-    String formattedValue = ValueStringFormatter.getFormattedString(
+    String formattedValue = WebServerUtil.getFormattedString(
         LocalDateTime.of(2012, 11, 5, 13, 0, 30, 120000000),
         TypeProtos.MinorType.TIMESTAMP);
     assertTrue(formattedValue.equals("2012-11-05 13:00:30.12"));
@@ -43,7 +43,7 @@ public class TestValueStringFormatter {
 
   @Test
   public void testTimestampWithNoMillis() {
-    String formattedValue = ValueStringFormatter.getFormattedString(
+    String formattedValue = WebServerUtil.getFormattedString(
         LocalDateTime.of(2012, 11, 5, 13, 0, 30),
         TypeProtos.MinorType.TIMESTAMP);
     assertTrue(formattedValue.equals("2012-11-05 13:00:30.0"));
@@ -51,7 +51,7 @@ public class TestValueStringFormatter {
 
   @Test
   public void testString() {
-    String formattedValue = ValueStringFormatter.getFormattedString(
+    String formattedValue = WebServerUtil.getFormattedString(
         "2012-11-05 13:00:30.0",
         TypeProtos.MinorType.VARCHAR);
     assertTrue(formattedValue.equals("2012-11-05 13:00:30.0"));

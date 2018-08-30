@@ -24,16 +24,20 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
 
-public class ValueStringFormatter {
+public class WebServerUtil {
 
   public static String getFormattedString(Object value, TypeProtos.MinorType minorType) {
     switch (minorType) {
       case TIMESTAMP:
-        DateTimeFormatter formatter = new DateTimeFormatterBuilder()
-            .appendPattern("yyyy-MM-dd HH:mm:ss")
-            .appendFraction(ChronoField.MILLI_OF_SECOND, 1, 3, true)
-            .toFormatter();
-        return value instanceof LocalDateTime ? ((LocalDateTime) value).format(formatter) : value.toString();
+        if (value instanceof LocalDateTime) {
+          DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+              .appendPattern("yyyy-MM-dd HH:mm:ss")
+              .appendFraction(ChronoField.MILLI_OF_SECOND, 1, 3, true)
+              .toFormatter();
+          return ((LocalDateTime) value).format(formatter);
+        } else {
+          return value.toString();
+        }
       default:
         return value.toString();
     }
