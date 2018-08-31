@@ -18,15 +18,21 @@
 package org.apache.drill.exec.util;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.drill.common.types.TypeProtos;
 import org.apache.drill.common.types.TypeProtos.MinorType;
 import org.apache.drill.common.util.DrillStringUtils;
+import org.apache.drill.exec.ExecConstants;
 import org.apache.drill.exec.expr.fn.impl.DateUtility;
 import org.apache.drill.exec.record.MaterializedField;
 import org.apache.drill.exec.record.VectorAccessible;
 import org.apache.drill.exec.record.VectorWrapper;
+import org.apache.drill.exec.server.options.OptionManager;
 import org.apache.drill.exec.vector.AllocationHelper;
 import org.apache.drill.exec.vector.ValueVector;
 import org.joda.time.DateTime;
@@ -226,5 +232,28 @@ public class VectorUtil {
   private static int getColumnWidth(int[] columnWidths, int columnIndex) {
     return (columnWidths == null) ? DEFAULT_COLUMN_WIDTH
         : (columnWidths.length > columnIndex) ? columnWidths[columnIndex] : columnWidths[0];
+  }
+
+  public static String formatValueVectorElement(Object value, TypeProtos.MinorType minorType, OptionManager options) {
+    switch (minorType) {
+      case TIMESTAMP:
+        if (value instanceof LocalDateTime) {
+          String formatPattern = options.getString(ExecConstants.WEB_TIMESTAMP_DISPLAY_FORMAT);
+          if (!formatPattern.isEmpty()) {
+            DateTimeFormatter formatter;
+            if (formatPattern.toLowerCase().equals("sql")) {
+              formatter = new DateTimeFormatterBuilder()
+                  .appendPattern("yyyy-MM-dd HH:mm:ss")
+                  .appendFraction(ChronoField.MILLI_OF_SECOND, 1, 3, true)
+                  .toFormatter();
+            } else {
+              formatter = DateTimeFormatter.ofPattern(formatPattern);
+            }
+            return ((LocalDateTime) value).format(formatter);
+          }
+        }
+      default:
+        return value.toString();
+    }
   }
 }

@@ -632,6 +632,9 @@ public final class ExecConstants {
   public static final String WEB_LOGS_MAX_LINES = "web.logs.max_lines";
   public static final OptionValidator WEB_LOGS_MAX_LINES_VALIDATOR = new PositiveLongValidator(WEB_LOGS_MAX_LINES, Integer.MAX_VALUE);
 
+  public static final String WEB_TIMESTAMP_DISPLAY_FORMAT = "web.timestamp.display_format";
+  public static final OptionValidator WEB_TIMESTAMP_DISPLAY_FORMAT_VALIDATOR = new StringValidator(WEB_TIMESTAMP_DISPLAY_FORMAT);
+
   public static final String CODE_GEN_EXP_IN_METHOD_SIZE = "exec.java.compiler.exp_in_method_size";
   public static final LongValidator CODE_GEN_EXP_IN_METHOD_SIZE_VALIDATOR = new LongValidator(CODE_GEN_EXP_IN_METHOD_SIZE);
 

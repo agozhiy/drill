@@ -35,6 +35,8 @@ import org.apache.drill.exec.rpc.Acks;
 import org.apache.drill.exec.rpc.ConnectionThrottle;
 import org.apache.drill.exec.rpc.RpcOutcomeListener;
 import org.apache.drill.exec.rpc.user.UserSession;
+import org.apache.drill.exec.server.options.OptionManager;
+import org.apache.drill.exec.util.VectorUtil;
 import org.apache.drill.exec.vector.ValueVector.Accessor;
 
 import java.net.SocketAddress;
@@ -112,9 +114,10 @@ public class WebUserConnection extends AbstractDisposableUserClientConnection im
           for (VectorWrapper<?> vw : loader) {
             final String field = vw.getValueVector().getMetadata().getNamePart().getName();
             final TypeProtos.MinorType fieldMinorType = vw.getValueVector().getMetadata().getMajorType().getMinorType();
+            final OptionManager options = webSessionResources.getSession().getOptions();
             final Accessor accessor = vw.getValueVector().getAccessor();
             final Object value = i < accessor.getValueCount() ? accessor.getObject(i) : null;
-            final String display = value == null ? null : WebServerUtil.getFormattedString(value, fieldMinorType);
+            final String display = value == null ? null : VectorUtil.formatValueVectorElement(value, fieldMinorType, options);
             record.put(field, display);
           }
           results.add(record);
