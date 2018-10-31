@@ -47,22 +47,22 @@ public enum RpcType implements com.dyuproject.protostuff.EnumLite<RpcType>
     SERVER_META(9),
     QUERY_RESULT(10),
     SASL_MESSAGE(24);
-    
+
     public final int number;
-    
+
     private RpcType (int number)
     {
         this.number = number;
     }
-    
+
     public int getNumber()
     {
         return number;
     }
-    
+
     public static RpcType valueOf(int number)
     {
-        switch(number) 
+        switch(number)
         {
             case 0: return HANDSHAKE;
             case 1: return ACK;
