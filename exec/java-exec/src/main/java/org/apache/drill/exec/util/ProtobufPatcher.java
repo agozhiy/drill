@@ -25,6 +25,7 @@ import javassist.CtMethod;
 import javassist.CtNewConstructor;
 import javassist.CtNewMethod;
 import javassist.Modifier;
+import javassist.NotFoundException;
 
 public class ProtobufPatcher {
 
@@ -39,7 +40,7 @@ public class ProtobufPatcher {
         patchGeneratedMessageLite();
         patchGeneratedMessageLiteBuilder();
         patched = true;
-      } catch (Throwable e) {
+      } catch (Exception e) {
         logger.warn("Unable to patch Protobuf.", e);
       }
     }
@@ -51,9 +52,10 @@ public class ProtobufPatcher {
    * that were made final in version 3.6.0 of protobuf.
    * This method removes the final modifiers.
    *
-   * @throws Exception
+   * @throws NotFoundException if unable to find a method or class to patch.
+   * @throws CannotCompileException if unable to compile the patched class.
    */
-  private static void patchByteString() throws Exception {
+  private static void patchByteString() throws NotFoundException, CannotCompileException {
     ClassPool cp = ClassPool.getDefault();
     CtClass cc = cp.get("com.google.protobuf.ByteString");
     removeFinal(cc.getDeclaredMethod("toString"));
@@ -67,9 +69,10 @@ public class ProtobufPatcher {
    * that were made final in version 3.6.0 of protobuf.
    * This method removes the final modifiers.
    *
-   * @throws Exception
+   * @throws NotFoundException if unable to find a method or class to patch.
+   * @throws CannotCompileException if unable to compile the patched method body.
    */
-  private static void patchGeneratedMessageLite() throws Exception {
+  private static void patchGeneratedMessageLite() throws NotFoundException, CannotCompileException {
     ClassPool cp = ClassPool.getDefault();
     CtClass cc = cp.get("com.google.protobuf.GeneratedMessageLite");
     removeFinal(cc.getDeclaredMethod("getParserForType"));
@@ -103,9 +106,10 @@ public class ProtobufPatcher {
    * This method removes the final modifiers.
    * Also, adding back a default constructor that was removed.
    *
-   * @throws Exception if unable to patch.
+   * @throws NotFoundException if unable to find a method or class to patch.
+   * @throws CannotCompileException if unable to add a default constructor.
    */
-  private static void patchGeneratedMessageLiteBuilder() throws Exception {
+  private static void patchGeneratedMessageLiteBuilder() throws NotFoundException, CannotCompileException {
     ClassPool cp = ClassPool.getDefault();
     CtClass cc = cp.get("com.google.protobuf.GeneratedMessageLite$Builder");
     removeFinal(cc.getDeclaredMethod("isInitialized"));

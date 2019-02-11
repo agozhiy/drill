@@ -31,9 +31,9 @@ before_install:
   - |
     if [ $PHASE = "build_checkstyle_protobuf" ]; then \
       sudo apt-get install -y libboost-all-dev libzookeeper-mt-dev libsasl2-dev cmake libcppunit-dev && \
-      pushd .. && wget https://github.com/google/protobuf/releases/download/v2.5.0/protobuf-2.5.0.tar.gz && \
-      tar -xzvf protobuf-2.5.0.tar.gz && \
-      pushd protobuf-2.5.0 && ./configure --prefix=/usr && make && sudo make install && popd && popd; \
+      pushd .. && wget https://github.com/protocolbuffers/protobuf/releases/download/v3.6.0/protoc-3.6.0-linux-x86_64.zip && \
+      unzip -a protoc-3.6.0-linux-x86_64.zip -d protoc3 && \
+      sudo mv protoc3/bin/* /usr/local/bin/ && sudo mv protoc3/include/* /usr/local/include/ && sudo ldconfig && popd; \
     fi
 install:
   # For tests phase runs unit tests
