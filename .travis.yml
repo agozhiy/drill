@@ -25,15 +25,26 @@ jdk:
 cache:
   directories:
   - "$HOME/.m2"
+  - "$HOME/protobuf"
 before_install:
   - git fetch --unshallow
   # Install libraries required for protobuf generation
   - |
     if [ $PHASE = "build_checkstyle_protobuf" ]; then \
-      sudo apt-get install -y libboost-all-dev libzookeeper-mt-dev libsasl2-dev cmake libcppunit-dev && \
-      pushd .. && wget https://github.com/protocolbuffers/protobuf/releases/download/v3.6.0/protoc-3.6.0-linux-x86_64.zip && \
-      unzip -a protoc-3.6.0-linux-x86_64.zip -d protoc3 && \
-      sudo mv protoc3/bin/* /usr/local/bin/ && sudo mv protoc3/include/* /usr/local/include/ && sudo ldconfig && popd; \
+      sudo apt-get install -y libboost-all-dev libzookeeper-mt-dev libsasl2-dev cmake libcppunit-dev checkinstall && \
+      pushd .. && \
+      if [ -f $HOME/protobuf/protobuf_3.6.0* ]; then \
+        sudo dpkg -i $HOME/protobuf/protobuf_3.6.0*; \
+      else \
+        wget https://github.com/protocolbuffers/protobuf/releases/download/v3.6.0/protobuf-java-3.6.0.zip && \
+        unzip protobuf-java-3.6.0.zip && pushd protobuf-3.6.0 && \
+        ./configure && sudo make && sudo checkinstall -y && \
+        if [ ! -d $HOME/protobuf ]; then \
+          mkdir -p $HOME/protobuf; \
+        fi && \
+        mv protobuf_3.6.0* $HOME/protobuf/ && popd; \
+      fi && \
+      sudo ldconfig && popd; \
     fi
 install:
   # For tests phase runs unit tests
