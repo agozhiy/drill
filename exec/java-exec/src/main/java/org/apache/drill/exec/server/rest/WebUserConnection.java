@@ -151,7 +151,7 @@ public class WebUserConnection extends AbstractDisposableUserClientConnection im
         loader.clear();
       }
     } catch (Exception e) {
-      exception = UserException.systemError(e).build(logger);
+      throw UserException.systemError(e).build(logger);
     } finally {
       // Notify the listener with ACK.OK both in error/success case because data was send successfully from Drillbit.
       bufferWithData.release();
