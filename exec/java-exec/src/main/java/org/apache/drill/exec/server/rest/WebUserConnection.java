@@ -17,7 +17,7 @@
  */
 package org.apache.drill.exec.server.rest;
 
-import org.apache.drill.exec.rpc.RpcException;
+import org.apache.drill.exec.ExecConstants;
 import org.apache.drill.exec.util.ValueVectorElementFormatter;
 import org.apache.drill.shaded.guava.com.google.common.collect.Lists;
 import org.apache.drill.shaded.guava.com.google.common.collect.Maps;
@@ -152,14 +152,14 @@ public class WebUserConnection extends AbstractDisposableUserClientConnection im
         loader.clear();
       }
     } catch (Exception e) {
-      exception = UserException.systemError(e).build(logger);
+      boolean verbose = webSessionResources.getSession()
+          .getOptions()
+          .getBoolean(ExecConstants.ENABLE_VERBOSE_ERRORS_KEY);
+      error = UserException.systemError(e).build(logger).getOrCreatePBError(verbose);
     } finally {
+      // Notify the listener with ACK.OK both in error/success case because data was send successfully from Drillbit.
       bufferWithData.release();
-      if (exception != null) {
-        listener.failed(new RpcException(exception));
-      } else {
-        listener.success(Acks.OK, null);
-      }
+      listener.success(Acks.OK, null);
     }
   }
 
