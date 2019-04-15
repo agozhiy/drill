@@ -97,6 +97,9 @@ public class ExecTest extends DrillTest {
     when(context.getConfig()).thenReturn(c);
     when(context.getOptionManager()).thenReturn(optionManager);
     when(context.getCompiler()).thenReturn(CodeCompilerTestFactory.getTestCompiler(c));
+    when(context.getLpPersistence()).thenReturn(PhysicalPlanReaderTestFactory.defaultLogicalPlanPersistence(c));
+    when(context.getClasspathScan()).thenReturn(ClassPathScanner.fromPrescan(c));
+    when(context.getStoreProvider()).thenReturn(new LocalPersistentStoreProvider(c));
 
     return context;
   }

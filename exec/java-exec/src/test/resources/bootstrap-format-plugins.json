@@ -1,0 +1,31 @@
+{
+  "storage":{
+    "storage1": {
+      "type": "file",
+      "formats": {
+        "format1": {
+          "type": "text"
+        }
+      }
+    },
+    "storage2": {
+      "type": "file",
+      "formats": {
+        "format1": {
+          "type": "json"
+        },
+        "format3": {
+          "type": "text"
+        }
+      }
+    },
+    "storage3": {
+      "type": "file",
+      "formats": {
+        "format1": {
+          "type": "text"
+        }
+      }
+    }
+  }
+}
