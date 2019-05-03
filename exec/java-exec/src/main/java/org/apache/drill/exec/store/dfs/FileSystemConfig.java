@@ -49,7 +49,7 @@ public class FileSystemConfig extends StoragePluginConfig {
     Map<String, WorkspaceConfig> caseInsensitiveWorkspaces = CaseInsensitiveMap.newHashMap();
     Optional.ofNullable(workspaces).ifPresent(caseInsensitiveWorkspaces::putAll);
     this.workspaces = caseInsensitiveWorkspaces;
-    this.formats = formats != null? formats : new LinkedHashMap<>();
+    this.formats = formats != null ? formats : new LinkedHashMap<>();
   }
 
   @JsonProperty
