@@ -208,9 +208,6 @@ public class StorageResources {
     if (name.isEmpty()) {
       return message("Error (a storage name cannot be empty)");
     }
-    if (!name.matches("^[a-zA-Z0-9._-]+$")) {
-      return message("Error (a storage name can only contain letters, numbers and symbols '.', '-', and '_' )");
-    }
     try {
       mapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
       StoragePluginConfig config = mapper.readValue(new StringReader(storagePluginConfig), StoragePluginConfig.class);
