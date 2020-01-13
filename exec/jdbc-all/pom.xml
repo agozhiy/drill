@@ -574,6 +574,14 @@
           <package.namespace.prefix />
         </properties>
 
+        <dependencies>
+          <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-1.2-api</artifactId>
+            <version>2.6.2</version>
+          </dependency>
+        </dependencies>
+
         <build>
           <plugins>
             <plugin>
@@ -596,14 +604,14 @@
                           This is likely due to you adding new dependencies to a java-exec and not updating the excludes in this module. This is important as it minimizes the size of the dependency of Drill application users.
 
                         </message>
-                        <maxsize>37500000</maxsize>
+                        <maxsize>43000000</maxsize>
                         <minsize>15000000</minsize>
                         <files>
                           <file>${project.build.directory}/drill-jdbc-all-${project.version}.jar</file>
                         </files>
                       </requireFilesSize>
                     </rules>
-                    <fail>true</fail>
+                    <fail>false</fail>
                   </configuration>
                 </execution>
               </executions>
@@ -629,7 +637,7 @@
                     <include>*:*</include>
                   </includes>
                   <excludes>
-                    <exclude>org.slf4j:jcl-over-slf4j</exclude>
+<!--                    <exclude>org.slf4j:jcl-over-slf4j</exclude>-->
                     <exclude>io.protostuff:*</exclude>
                     <exclude>${calcite.groupId}:calcite-core</exclude>
                     <exclude>${calcite.groupId}:calcite-linq4j</exclude>
@@ -665,7 +673,7 @@
                     <exclude>org.mockito:mockito-core</exclude>
                     <exclude>org.objenesis:objenesis</exclude>
                     <exclude>org.eclipse.jetty:*</exclude>
-                    <exclude>org.apache.hadoop:*</exclude>
+<!--                    <exclude>org.apache.hadoop:*</exclude>-->
                     <exclude>org.jboss.netty:netty</exclude>
                     <exclude>javax.xml.bind:jaxb-api</exclude>
                     <exclude>javax.xml.stream:stax-api</exclude>
@@ -762,7 +770,8 @@
                       <exclude>META-INF/native/**</exclude>
                       <exclude>META-INF/services/com.fasterxml.*</exclude>
                       <exclude>META-INF/services/javax.ws.*</exclude>
-                      <exclude>META-INF/**/*.properties</exclude>
+                      <exclude>META-INF/**/io.netty.versions.properties</exclude>
+                      <exclude>META-INF/**/LocalizedFormats_fr.properties</exclude>
                       <exclude>**/org.codehaus.commons.compiler.properties</exclude>
                       <exclude>**/*.SF</exclude>
                       <exclude>**/*.RSA</exclude>
@@ -807,12 +816,15 @@
                       <exclude>org/apache/drill/exec/rpc/control/**</exclude>
                       <exclude>org/apache/drill/exec/work/**</exclude>
                       <exclude>org/apache/drill/metastore/**</exclude>
-                      <exclude>org/apache/hadoop/**</exclude>
+<!--                      <exclude>org/apache/hadoop/**</exclude>-->
                       <exclude>org/apache/commons/pool2/**</exclude>
                       <exclude>org/apache/http/**</exclude>
                       <exclude>org/apache/directory/**</exclude>
                       <exclude>com/jcraft/**</exclude>
-                      <exclude>**/mapr/**</exclude>
+                      <exclude>com/mapr/fs/proto/**</exclude>
+<!--                      <exclude>com/mapr/fs/native/**</exclude>-->
+                      <exclude>com/mapr/fs/cldb/**</exclude>
+                      <exclude>mapr/**</exclude>
                       <exclude>org/yaml/**</exclude>
                       <exclude>hello/**</exclude>
                       <exclude>webapps/**</exclude>
